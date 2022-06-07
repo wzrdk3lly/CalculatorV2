@@ -5,6 +5,7 @@ let operand1="";
 let operand2="";
 let operator1="";
 let operator2="";
+let result="";
 
 let inputContainer = document.querySelector(".input"); 
 
@@ -15,63 +16,83 @@ buttons.addEventListener('click', onClick, false);
 
 // global event handler
 function onClick(e){
-    
+    // performance optimization technique for event handlers 
     if (e.target !== e.currentTarget){
-        // TODO: once logic is mapped out, you need to convert each of the handlers to functions so its digestible for future use.
-                // - you might need to research how to nest an event listener or if you can pass the event to a function within a function
+        // leverage switch statements for the event handler scenarios
         switch (true){
-            // if the second operator has not been pressed yet continue filling in first operand 
+            //Case for handling what happens when numbers are clicked
             case isNumbersGroup(e.target.className):
-                if(operator1 === ""){
-                    operand1 += e.target.innerText;
-                    inputContainer.innerText = operand1;
-                    console.log(`appending ${e.target.innerText} into the input box for the first operand`)
-                }
-                
-                //if the first operand has been entered do something
-                else if (operand1 !== "" && operator1 !== ""){
-                    clearInputText();
-                    operand2 += e.target.innerText
-                    inputContainer.innerText = operand2;
-                    console.log(`appending ${e.target.innerText} into the input box for the second operand`)
-                }
+                operandHandler(e);
                 break;
-            // operator handling 
+            // Case for handling output/calculations depending on which 
+            // operators are pressed at a specific point in time of the calculation 
             case isOperatorsGroup(e.target.className):
-                // first operator handling 
-                if (operator1 === ""){
-                    operator1 = e.target.innerText;
-                    console.log(`entering ${e.target.innerText} into the variable for the first operator`)
-                }
-                // operator 2 handling 
-                else if (operator1 !== ""){
-                    // Performing operation for the equal sign being pressed as second operator
-                    if (e.target.innerText === "="){
-                        
-                        console.log(`performing a calculation with operand1:${operand1} operator2:${operand2} and operator:${operator1}`);
-
-                        //using this as test to make sure operation and display works 
-                        // TODO: convert the anser back to string before displaying it back to the users 
-                        // TODO: store this as an operand1 and clear the items you need too
-                       inputContainer.innerText = performOperation(operator1,(Number(operand1)),(Number(operand2)));
-                        // performOperation(operator1,)
-                    }
-
-                    //TODO: Write an if statement for  
-                }
+                operatorHandler(e);
                 break;
+            case isBtnClear(e):
             //TODO: Create a case for when the AC button is pressed
             //TODO: Create a cse for when the +- button is presses
             
             default:
                 break;
         }
-        
-
     }
-   
 }
 
+
+function operatorHandler(e) {
+// first operator handling 
+if (operator1 === ""){
+    operator1 = e.target.innerText;
+    console.log(`entering ${e.target.innerText} into the variable for the first operator`)
+}
+// operator 2 handling 
+else if (operator1 !== ""){
+    // Performing operation for the equal sign being pressed as second operator
+    if (e.target.innerText === "="){
+        
+        console.log(`performing a calculation with operand1:${operand1} operator2:${operand2} and operator:${operator1}`);
+
+        // TODO: May need to convert the answer back to string before displaying it back to the users 
+        // TODO: store this as an operand1 and clear the items you need too
+    
+        //using this as test to make sure operation and display works 
+        result = performOperation(operator1,(Number(operand1)),(Number(operand2)));
+       inputContainer.innerText = result;
+       
+    } 
+}
+}
+
+
+function operandHandler(e){
+    if(operator1 === ""){
+        operand1 += e.target.innerText;
+        inputContainer.innerText = operand1;
+        console.log(`appending ${e.target.innerText} into the input box for the first operand`)
+    }
+    
+    //if the first operand has been entered do something
+    else if (operand1 !== "" && operator1 !== ""){
+        clearInputText();
+        operand2 += e.target.innerText
+        inputContainer.innerText = operand2;
+        console.log(`appending ${e.target.innerText} into the input box for the second operand`)
+    }
+}
+
+function isBtnClear(e){
+    if (e.target.className === "clear-button"){
+        clearInputText();
+        operand1="";
+        operand2="";
+        operator1="";
+        operator2="";
+        result="";
+        console.log("clearing the input")
+    }
+    
+}
 function clearInputText(){
     inputContainer.innerText = ""
 }
@@ -87,9 +108,6 @@ function isOperatorsGroup(className){
         return true;
     }
 }
-
-
-
 
 function performOperation(operation,operand1,operand2){
     switch (true){
@@ -126,7 +144,6 @@ function multiply(multiplier,multiplicand){
 function divide(dividend,divisor){
    return dividend/divisor
 }
-
 
 //Pseudo code notes 
 /* 
