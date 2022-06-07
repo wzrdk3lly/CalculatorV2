@@ -1,4 +1,4 @@
-//TODO:1 Watch "handling events for multiple events" https://www.youtube.com/watch?v=Xwq1Hj1DyDM
+// TODO: write comments to explain the why of what you are doing...these will server as your architecture diagrams
 
 // Get numbers ONLY to output to the screen and then store this as a global operand1
 let operand1="";
@@ -7,29 +7,25 @@ let operator1="";
 let operator2="";
 
 let inputContainer = document.querySelector(".input"); 
+
 //Global event handler for buttons within calculator 
 let buttons = document.querySelector(".button-container");
 buttons.addEventListener('click', onClick, false);
 
-// // Add click event listener to each of the numbers buttons
-// for (const selectedNumber of selectedNumbers){
-//     selectedNumber.addEventListener('click',onClick);
-// }
 
-
-// Display the contents to the input section of the screen
+// global event handler
 function onClick(e){
     
-    
     if (e.target !== e.currentTarget){
-
+        // TODO: once logic is mapped out, you need to convert each of the handlers to functions so its digestible for future use.
+                // - you might need to research how to nest an event listener or if you can pass the event to a function within a function
         switch (true){
             // if the second operator has not been pressed yet continue filling in first operand 
             case isNumbersGroup(e.target.className):
                 if(operator1 === ""){
                     operand1 += e.target.innerText;
                     inputContainer.innerText = operand1;
-                    console.log(`entering ${e.target.innerText} into the input box for the first operand`)
+                    console.log(`appending ${e.target.innerText} into the input box for the first operand`)
                 }
                 
                 //if the first operand has been entered do something
@@ -37,7 +33,7 @@ function onClick(e){
                     clearInputText();
                     operand2 += e.target.innerText
                     inputContainer.innerText = operand2;
-                    // console.log('enterin')
+                    console.log(`appending ${e.target.innerText} into the input box for the second operand`)
                 }
                 break;
             // operator handling 
@@ -45,32 +41,33 @@ function onClick(e){
                 // first operator handling 
                 if (operator1 === ""){
                     operator1 = e.target.innerText;
+                    console.log(`entering ${e.target.innerText} into the variable for the first operator`)
                 }
                 // operator 2 handling 
                 else if (operator1 !== ""){
-                    operator2 = e.target.innerText;
-                    if (operator2 === "="){
-                        performOperation(operator1,)
+                    // Performing operation for the equal sign being pressed as second operator
+                    if (e.target.innerText === "="){
+                        
+                        console.log(`performing a calculation with operand1:${operand1} operator2:${operand2} and operator:${operator1}`);
+
+                        //using this as test to make sure operation and display works 
+                        // TODO: convert the anser back to string before displaying it back to the users 
+                        // TODO: store this as an operand1 and clear the items you need too
+                       inputContainer.innerText = performOperation(operator1,(Number(operand1)),(Number(operand2)));
+                        // performOperation(operator1,)
                     }
+
+                    //TODO: Write an if statement for  
                 }
                 break;
+            //TODO: Create a case for when the AC button is pressed
+            //TODO: Create a cse for when the +- button is presses
+            
             default:
                 break;
         }
         
-        // inputContainer.innerText = operand2;
 
-        //Create a case/what to do if the user selects a number 
-        
-        // create a case for if a user selects an operator 
-
-        //create a case for if a user selects clear
-
-
-        // 
-
-        // operand1 += e.target.innerText;
-        // console.log(e.target.className)
     }
    
 }
