@@ -46,70 +46,67 @@ function onClick(e){
 
 function operatorHandler(e) {
 //Adds clicked operator button as the operator if operator doesn't exist
-if (!operatorExist()){
-    operator = e.target.innerText;
-    console.log(`entering ${e.target.innerText} into the variable for the operator`)
-}
-
-// else {
-    // Performing operation for the equal sign being pressed instead of a plus 
+    if (!operatorExist()){
+        operator = e.target.innerText;
+        console.log(`entering ${e.target.innerText} into the variable for the operator`)
+    }
+        // Performing operation for the equal sign being pressed instead of a plus 
     else if (e.target.innerText === "="){
         
         console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
-    
+
         //using this as test to make sure operation and display works 
         result = performOperation(operator,(Number(operand1)),(Number(operand2)));
         
         DisplayResult();
-   
-       console.log(`changed the operand1 to new value ${operand1}`);
-       operator = "";
-       console.log('cleared the operator')// Clear operator to allow for "first operator handling" on line 46
-       operand2 = "";
-       console.log('cleared the operand')// clear second operand in order to string calculations with an another operator ONLY after pressing equal
-    }
 
-    //perform operation to string calculations if an equal sign is not pressed and another operator is 
+        console.log(`changed the operand1 to new value ${operand1}`);
+        operator = "";
+        console.log('cleared the operator')// Clear operator to allow for "first operator handling" on line 46
+        operand2 = "";
+        console.log('cleared operand 2')// clear second operand in order to string calculations with an another operator ONLY after pressing equal
+    }
+        //perform operation to string calculations if an equal sign is not pressed and another operator is 
     else {
         
-        
-
         console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
 
         result = performOperation(operator,(Number(operand1)),(Number(operand2)));
         
         DisplayResult();
 
-       console.log(`changed the operand1 to new value ${operand1}`)
-       
-       operator = e.target.innerText;
-       console.log(`changed operator to ${operator} `)
+        console.log(`changed the operand1 to new value ${operand1}`)
+        
+        operator = e.target.innerText;
+        console.log(`changed operator to ${operator} `)
 
-       operand2 = "";
-       console.log("cleared operand 2")
-       // we do not clear the operator because we want to continue performing a calculation with any new numbers
+        operand2 = "";
+        console.log("cleared operand 2")
+        // we do not clear the operator because we want to continue performing a calculation with any new numbers
     }  
 }
-// }
+
 
 function operandHandler(e){
     
-    //Scenario to append numbers to first operand when the operator has not been selected yet
+    // appending numbers to the first operand 
     if (!operatorExist()){
-        operand1 += e.target.innerText;
-        inputContainer.innerText = operand1;
-        console.log(`appending ${e.target.innerText} into the input box for the first operand`)
+        // If the user presses a number while there is already an outstanding result it will 
+        // automatically restart and begin appending to first operand 
+        if(operand2 === "" && result !==""){
+            clearInputText();
+            clear();
+            // operand1 += e.target.innerText;
+            // inputContainer.innerText = operand1;
+            appendToFirstOperand(e);
+            console.log(`appending ${e.target.innerText} into the input box for the first operand`)
+        }
+        // append to the first operand
+        else{
+            appendToFirstOperand(e);
+            console.log(`appending ${e.target.innerText} into the input box for the first operand`)
+        }
     }
-    //if an operation has been performed  and a new number is selected, clear the results and restart calculation
-    // else if (operand1 !=="" && operator !=="" && operand2 !==""){
-    //     clearInputText();
-    //     clear();
-    //     operand1 += e.target.innerText;
-    //     inputContainer.innerText = operand1;
-    //     console.log(`appending ${e.target.innerText} into the input box for the first operand`)
-    // }
-    
-    //if the first operand has been entered do something
     else if (operand1 !== "" && operator !== ""){
         clearInputText();
         operand2 += e.target.innerText
@@ -124,7 +121,6 @@ function isBtnClear(e){
         clearInputText();
         clear();
     }
-    
 }
 
 function DisplayResult(){
@@ -166,6 +162,12 @@ function isOperatorsGroup(className){
     if (className === "operators"){
         return true;
     }
+}
+
+function appendToFirstOperand(e){
+    operand1 += e.target.innerText;
+    inputContainer.innerText = operand1;
+    // console.log(`appending ${e.target.innerText} into the input box for the first operand`)
 }
 
 function performOperation(operation,operand1,operand2){
