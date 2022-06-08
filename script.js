@@ -20,6 +20,7 @@ buttons.addEventListener('click', onClick, false);
 
 // global event handler
 function onClick(e){
+
     // performance optimization technique for event handlers 
     if (e.target !== e.currentTarget){
         // leverage switch statements for the event handler scenarios
@@ -35,8 +36,7 @@ function onClick(e){
                 break;
             // When the AC button is pressed clear all storage variables + screen output
             case isBtnClear(e):
-            
-
+    
             default:
                 break;
         }
@@ -51,9 +51,9 @@ if (!operatorExist()){
     console.log(`entering ${e.target.innerText} into the variable for the operator`)
 }
 
-else {
+// else {
     // Performing operation for the equal sign being pressed instead of a plus 
-    if (e.target.innerText === "="){
+    else if (e.target.innerText === "="){
         
         console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
     
@@ -68,11 +68,12 @@ else {
        operand2 = "";
        console.log('cleared the operand')// clear second operand in order to string calculations with an another operator ONLY after pressing equal
     }
-    
+
     //perform operation to string calculations if an equal sign is not pressed and another operator is 
     else {
+        
+        
 
-        operator = e.target.innerText;
         console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
 
         result = performOperation(operator,(Number(operand1)),(Number(operand2)));
@@ -80,11 +81,16 @@ else {
         DisplayResult();
 
        console.log(`changed the operand1 to new value ${operand1}`)
+       
+       operator = e.target.innerText;
+       console.log(`changed operator to ${operator} `)
+
        operand2 = "";
+       console.log("cleared operand 2")
        // we do not clear the operator because we want to continue performing a calculation with any new numbers
     }  
 }
-}
+// }
 
 function operandHandler(e){
     
@@ -124,6 +130,7 @@ function isBtnClear(e){
 function DisplayResult(){
     inputContainer.innerText = result;
     operand1 = result;
+    
    }
 
 function clear(){
