@@ -1,10 +1,10 @@
-// TODO: write comments to explain the why of what you are doing...these will server as your architecture diagrams
+//TODO: Reduce functions by breaking them out into more functions....remember a function needs to perform 1 purpose, not multiple
+
 
 // Get numbers ONLY to output to the screen and then store this as a global operand1
 let operand1="";
 let operand2="";
-let operator1="";
-let operator2="";
+let operator="";
 let result="";
 
 let inputContainer = document.querySelector(".input"); 
@@ -29,10 +29,12 @@ function onClick(e){
             case isOperatorsGroup(e.target.className):
                 operatorHandler(e);
                 break;
+            // When the AC button is pressed clear all storage variables + screen output
             case isBtnClear(e):
-            //TODO: Create a case for when the AC button is pressed
-            //TODO: Create a cse for when the +- button is presses
             
+            // //TODO: finish case for when the +- button is presses
+            // case isBtnPositiveNegative(e):
+
             default:
                 break;
         }
@@ -42,57 +44,86 @@ function onClick(e){
 
 function operatorHandler(e) {
 // first operator handling 
-if (operator1 === ""){
-    operator1 = e.target.innerText;
-    console.log(`entering ${e.target.innerText} into the variable for the first operator`)
+if (operator === ""){
+    operator = e.target.innerText;
+    console.log(`entering ${e.target.innerText} into the variable for the operator`)
 }
 // operator 2 handling 
-else if (operator1 !== ""){
+else if (operator !== ""){
     // Performing operation for the equal sign being pressed as second operator
     if (e.target.innerText === "="){
-        
-        console.log(`performing a calculation with operand1:${operand1} operator2:${operand2} and operator:${operator1}`);
-
-        // TODO: May need to convert the answer back to string before displaying it back to the users 
+        console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
         // TODO: store this as an operand1 and clear the items you need too
-    
         //using this as test to make sure operation and display works 
-        result = performOperation(operator1,(Number(operand1)),(Number(operand2)));
+        result = performOperation(operator,(Number(operand1)),(Number(operand2)));
+        
+       // update result 
        inputContainer.innerText = result;
-       
-    } 
+       operand1 = result;
+
+
+       console.log(`changed the operand1 to new value ${operand1}`);
+       operator = "";// Clear operator to allow for "first operator handling" on line 46
+       operand2 = "";// clear second operand in order to string calculation ONLY after pressing equal
+    }
+    //perform operation to string calculations if an equal sign is not pressed and another operator is 
+    else if (e.target.innerText !== "="){
+        operator = e.target.innerText;
+        console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
+
+        result = performOperation(operator,(Number(operand1)),(Number(operand2)));
+
+       // update result
+       inputContainer.innerText = result;
+       operand1 = result;
+
+       console.log(`changed the operand1 to new value ${operand1}`)
+       operand2 = "";
+       // we do not clear the operator because we want to continue performing a calculation with any new numbers
+    }  
+    
+    // TODO: Handle cases for training operations ie. 2+2+2 = 6. this will need to be an operator handler
+    // this case will duplicate
 }
 }
 
 
 function operandHandler(e){
-    if(operator1 === ""){
+    //Scenario when no number has been entered yet
+    if(operator === ""){
         operand1 += e.target.innerText;
         inputContainer.innerText = operand1;
         console.log(`appending ${e.target.innerText} into the input box for the first operand`)
     }
     
     //if the first operand has been entered do something
-    else if (operand1 !== "" && operator1 !== ""){
+    else if (operand1 !== "" && operator !== ""){
         clearInputText();
         operand2 += e.target.innerText
         inputContainer.innerText = operand2;
         console.log(`appending ${e.target.innerText} into the input box for the second operand`)
     }
+    
 }
 
 function isBtnClear(e){
     if (e.target.className === "clear-button"){
         clearInputText();
+       // break out the below into a clear variables function
         operand1="";
         operand2="";
-        operator1="";
-        operator2="";
+        operator="";
         result="";
         console.log("clearing the input")
     }
     
 }
+// TODO: finish isBtnpositiveNegative and break out the logic for performing operation.
+// function isBtnPositiveNegative(e){
+//     if (e.target.className === "positive-negative"){
+//         if ()
+//     }
+// }
 function clearInputText(){
     inputContainer.innerText = ""
 }
@@ -110,10 +141,13 @@ function isOperatorsGroup(className){
 }
 
 function performOperation(operation,operand1,operand2){
+    //TODO: Fix bugs for any scenarios where users enter weird math such as dividing by 0
+        // - or dividing 0 by another number. 
+        // - what happens if it's an extremely large number...lets add some rounding capabilities
     switch (true){
         // These will all likely need to be returned to an 
         // global variable or set global variable to the output 
-    
+        
         case (operation === "+"):
             return add(operand1,operand2);
             break;
@@ -128,6 +162,7 @@ function performOperation(operation,operand1,operand2){
         default:
             break;
     }
+   
 }
 function add(addend1,addend2) {
     return addend1 + addend2;
@@ -147,7 +182,7 @@ function divide(dividend,divisor){
 
 //Pseudo code notes 
 /* 
-store these numbers in some kind of variable maybe operator1
+store these numbers in some kind of variable maybe operator
 
 Listen out for operation symbols like (+,-,x./)
 after each operator is is pressed store the result as the global operand in order to keep "state". 
