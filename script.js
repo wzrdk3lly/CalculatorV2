@@ -93,15 +93,33 @@ function operandHandler(e){
             appendToFirstOperand(e);
             console.log(`appending ${e.target.innerText} into the input box for the first operand`)
         }
+        // limit ability to add more than one decimal for first operand
+        else if(e.target.innerText === "."){
+            if(operand1.includes(".")){
+                return;
+            }
+            appendToFirstOperand(e);
+        }
         else{
             appendToFirstOperand(e);
             console.log(`appending ${e.target.innerText} into the input box for the first operand`)
         }
     }
+    // If first operand and operator exist then the second operand can be appended too.
     else if (operand1 !== "" && operator !== ""){
+         // limit ability to add more than one decimal for the second operand
+         if(e.target.innerText === "."){
+            if(operand2.includes(".")){
+                return;
+            }
+            appendToSecondOperand(e);
+        }
+        else{
         clearInputText();
         appendToSecondOperand(e)
         console.log(`appending ${e.target.innerText} into the input box for the second operand`)
+        }
+
     }
 }
 
@@ -111,13 +129,103 @@ function isBtnClear(e){
         clear();
     }
 }
-
+// Displays result to calculator screen and sets the first operand as the result
 function displayResult(){
     inputContainer.innerText = result;
     operand1 = result;
    }
 
-// code to prevent unsafe math from occurring...also prevents users from spamming operators
+
+function clear(){
+    operand1="";
+    operand2="";
+    operator="";
+    result="";
+    console.log("clearing the input")
+}
+
+// TODO: finish isBtnpositiveNegative and break out the logic for performing operation.
+// function isBtnPositiveNegative(e){
+//     if (e.target.className === "positive-negative"){
+//         if ()
+//     }
+// may also need something like if input.innertext === operand 1 || 2 then update that operand
+// }
+
+
+
+function operatorExist(){
+    return !(operator === "");
+}
+
+function isNumbersGroup(className){
+    if (className === "numbers-group") {
+        return true;
+    }
+}
+
+function isOperatorsGroup(className){
+    if (className === "operators"){
+        return true;
+    }
+}
+
+
+// Display handling
+
+
+function clearInputText(){
+    inputContainer.innerText = ""
+}
+function appendToFirstOperand(e){
+    operand1 += e.target.innerText;
+    inputContainer.innerText = operand1;
+}
+
+function appendToSecondOperand(e){
+    operand2 += e.target.innerText;
+    inputContainer.innerText = operand2;
+}
+
+
+
+// Math Section
+
+
+function performOperation(operation,operand1,operand2){
+   
+    switch (true){
+        case (operation === "+"):
+            return safeMath(add(operand1,operand2));
+        case(operation === "-"):
+            return safeMath(subtract(operand1,operand2));
+        case(operation === "x"):
+            return safeMath(multiply(operand1,operand2));
+        case(operation === "/"):
+            return safeMath(divide(operand1,operand2));
+        default:
+            return 0;
+            break;
+    } 
+}
+
+function add(addend1,addend2) {
+    return safeMath(addend1 + addend2);
+}
+
+function subtract(minuend,subtrahend){
+    return safeMath(minuend - subtrahend);
+}
+
+function multiply(multiplier,multiplicand){
+    return safeMath(multiplier * multiplicand);
+}
+
+function divide(dividend,divisor){
+   return safeMath(dividend/divisor);
+}
+
+//prevents unsafe math from occurring...also prevents users from spamming operators
 function safeMath(answer){
     if (answer.toString().includes(".")){
         if (answer.toString().split(".")[1].length > 5){
@@ -139,90 +247,6 @@ function safeMath(answer){
     else{
         return answer
     }    
-}
-
-function clear(){
-    operand1="";
-    operand2="";
-    operator="";
-    result="";
-    console.log("clearing the input")
-}
-
-// TODO: finish isBtnpositiveNegative and break out the logic for performing operation.
-// function isBtnPositiveNegative(e){
-//     if (e.target.className === "positive-negative"){
-//         if ()
-//     }
-// }
-
-function clearInputText(){
-    inputContainer.innerText = ""
-}
-
-function operatorExist(){
-    return !(operator === "");
-}
-
-function isNumbersGroup(className){
-    // return className === "numbers-group"
-    if (className === "numbers-group") {
-        return true;
-    }
-}
-
-function isOperatorsGroup(className){
-    if (className === "operators"){
-        return true;
-    }
-}
-
-function appendToFirstOperand(e){
-    operand1 += e.target.innerText;
-    inputContainer.innerText = operand1;
-    // console.log(`appending ${e.target.innerText} into the input box for the first operand`)
-}
-
-function appendToSecondOperand(e){
-    operand2 += e.target.innerText;
-    inputContainer.innerText = operand2;
-}
-
-function performOperation(operation,operand1,operand2){
-   
-    switch (true){
-        // These will all likely need to be returned to an 
-        // global variable or set global variable to the output 
-        
-        case (operation === "+"):
-            return safeMath(add(operand1,operand2));
-        case(operation === "-"):
-            return safeMath(subtract(operand1,operand2));
-        case(operation === "x"):
-            return safeMath(multiply(operand1,operand2));
-        case(operation === "/"):
-            return safeMath(divide(operand1,operand2));
-        default:
-            return 0;
-            break;
-    } 
-}
-
-
-function add(addend1,addend2) {
-    return safeMath(addend1 + addend2);
-}
-
-function subtract(minuend,subtrahend){
-    return safeMath(minuend - subtrahend);
-}
-
-function multiply(multiplier,multiplicand){
-    return safeMath(multiplier * multiplicand);
-}
-
-function divide(dividend,divisor){
-   return safeMath(dividend/divisor);
 }
 
 // Limitations - spamming division will lead to NAN error.
