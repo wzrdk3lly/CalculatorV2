@@ -41,6 +41,10 @@ function onClick(e){
 function operatorHandler(e) {
     //Adds the 'clicked' operator when no operator has previously been selected
     if (!operatorExist()){
+        // prevent user from spamming operator buttons when there is nothing to perform an operation on
+        if(e.target.innerText === "=" || operand1 ===""){
+            return;
+        }
         operator = e.target.innerText;
         console.log(`entering ${e.target.innerText} into the variable for the operator`)
     }
@@ -63,7 +67,7 @@ function operatorHandler(e) {
     }
 
     //perform operation to string calculations if an equal sign is not pressed and another operator is 
-    else {
+    else{
 
         console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
 
@@ -221,7 +225,7 @@ function performOperation(operation,operand1,operand2){
         case(operation === "/"):
             return safeMath(divide(operand1,operand2));
         default:
-            return 0;
+            return ""
             break;
     } 
 }
@@ -253,17 +257,16 @@ function safeMath(answer){
         }
     }
     else if(answer === undefined){
-        return 0;
+        return "";
     }
     else if(answer === Infinity){
-        return NaN;
+        return "";
     }
     else if(answer === NaN){
-        return 0;
+        return "";
     }
     else{
         return answer
     }    
 }
 
-// Limitations - spamming division will lead to NAN error.
