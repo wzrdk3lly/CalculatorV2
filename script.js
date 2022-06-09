@@ -1,5 +1,3 @@
-//TODO: add a case for isBtnPositiveNegative(e):
-
 // Get numbers ONLY to output to the screen and then store this as a global operand1
 let operand1="";
 let operand2="";
@@ -30,6 +28,9 @@ function onClick(e){
                 break;
             // When the AC button is pressed clear all storage variables + screen output
             case isBtnClear(e):
+                break;
+            case isBtnPositiveNegative(e):
+                break;
             default:
                 break;
         }
@@ -123,12 +124,27 @@ function operandHandler(e){
     }
 }
 
+
 function isBtnClear(e){
     if (e.target.className === "clear-button"){
         clearInputText();
         clear();
     }
 }
+
+function isBtnPositiveNegative(e){
+    if (e.target.className === "positive-negative"){
+        if (!operatorExist()){
+            operand1 = operand1 * (-1);
+            inputContainer.innerText = operand1;
+        }
+        else if (operand1 !== "" && operator !== ""){
+            operand2 = operand2 * (-1);
+            inputContainer.innerText = operand2;
+        }
+    }
+}
+
 // Displays result to calculator screen and sets the first operand as the result
 function displayResult(){
     inputContainer.innerText = result;
@@ -162,6 +178,7 @@ function isNumbersGroup(className){
     if (className === "numbers-group") {
         return true;
     }
+    
 }
 
 function isOperatorsGroup(className){
