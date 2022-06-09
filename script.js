@@ -46,42 +46,33 @@ function operatorHandler(e) {
             return;
         }
         operator = e.target.innerText;
-        console.log(`entering ${e.target.innerText} into the variable for the operator`)
     }
 
     // Performing operation for the equal sign being pressed instead of a plus 
     else if (e.target.innerText === "="){
         
-        console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
 
         //using this as test to make sure operation and display works 
         result = performOperation(operator,(Number(operand1)),(Number(operand2)));
         
         displayResult();
 
-        console.log(`changed the operand1 to new value ${operand1}`);
         operator = "";
-        console.log('cleared the operator')// Clear operator to allow for "first operator handling" on line 46
         operand2 = "";
-        console.log('cleared operand 2')// clear second operand in order to string calculations with an another operator ONLY after pressing equal
     }
 
     //perform operation to string calculations if an equal sign is not pressed and another operator is 
     else{
 
-        console.log(`performing a calculation with operand1:${operand1} operand2:${operand2} and operator:${operator}`);
 
         result = performOperation(operator,(Number(operand1)),(Number(operand2)));
         
         displayResult();
 
-        console.log(`changed the operand1 to new value ${operand1}`)
         
         operator = e.target.innerText;
-        console.log(`changed operator to ${operator} `)
 
         operand2 = "";
-        console.log("cleared operand 2")
     }  
 }
 
@@ -96,7 +87,6 @@ function operandHandler(e){
             clearInputText();
             clear();
             appendToFirstOperand(e);
-            console.log(`appending ${e.target.innerText} into the input box for the first operand`)
         }
         // limit ability to add more than one decimal for first operand
         else if(e.target.innerText === "."){
@@ -107,7 +97,6 @@ function operandHandler(e){
         }
         else{
             appendToFirstOperand(e);
-            console.log(`appending ${e.target.innerText} into the input box for the first operand`)
         }
     }
     // If first operand and operator exist then the second operand can be appended too.
@@ -122,7 +111,6 @@ function operandHandler(e){
         else{
         clearInputText();
         appendToSecondOperand(e)
-        console.log(`appending ${e.target.innerText} into the input box for the second operand`)
         }
 
     }
@@ -161,18 +149,7 @@ function clear(){
     operand2="";
     operator="";
     result="";
-    console.log("clearing the input")
 }
-
-// TODO: finish isBtnpositiveNegative and break out the logic for performing operation.
-// function isBtnPositiveNegative(e){
-//     if (e.target.className === "positive-negative"){
-//         if ()
-//     }
-// may also need something like if input.innertext === operand 1 || 2 then update that operand
-// }
-
-
 
 function operatorExist(){
     return !(operator === "");
